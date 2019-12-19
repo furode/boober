@@ -40,17 +40,17 @@ integrations:
                 urlPattern: ${integrations.bitbucket.url}scm/${integrations.aurora.vault.git.project}/%s.git
     openshift:
         port: 8443
-        url: https://${openshift.cluster}-master.paas.skead.no:${integrations.openshift.port}
+        url: https://test-relay.skatteetaten.io/
         retries: 3
         backoff: 500
     docker:
-        registry: "docker-registry.aurora.sits.no:5000"
+        registry: "container-registry-internal-release.skatteeteaten.io:443"
 
 boober:
     openshift:
         tokenLocation: /var/run/secrets/kubernetes.io/serviceaccount/token
     route:
-        suffix: ".${openshift.cluster}.paas.skead.no"
+        suffix: ".test-relay.skatteetaten.io"
 
 aurora:
     token:
@@ -78,7 +78,7 @@ spring:
     profiles: local
 
 openshift:
-    cluster: utv
+    cluster: aws
 
 integrations:
     dbh:
@@ -89,13 +89,13 @@ integrations:
         url: http://localhost:9090
     openshift:
         port: 8443
-        url: https://${openshift.cluster}-master.paas.skead.no:${integrations.openshift.port}
+        url: https://test-relay.skatteetaten.io/
     docker:
         releases: "container-registry-internal-release.aurora.skead.no:443"
-        registry: "container-registry-internal-private-pull.aurora.skead.no:443"
+        registry: "container-registry-internal-private-pull.skatteeteaten.io:443"
 boober:
     openshift:
-        tokenLocation: /tmp/boober-token
+        tokenLocation: /tmp/boober-aws-token
 
 vault:
     operations:
