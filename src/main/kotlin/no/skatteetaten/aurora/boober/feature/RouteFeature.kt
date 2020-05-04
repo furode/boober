@@ -2,9 +2,12 @@ package no.skatteetaten.aurora.boober.feature
 
 import com.fkorotkov.openshift.metadata
 import com.fkorotkov.openshift.newRoute
+import com.fkorotkov.openshift.port
 import com.fkorotkov.openshift.spec
+import com.fkorotkov.openshift.targetPort
 import com.fkorotkov.openshift.tls
 import com.fkorotkov.openshift.to
+import io.fabric8.kubernetes.api.model.IntOrString
 import io.fabric8.openshift.api.model.Route
 import no.skatteetaten.aurora.boober.model.AuroraConfigException
 import no.skatteetaten.aurora.boober.model.AuroraConfigFieldHandler
@@ -18,6 +21,7 @@ import no.skatteetaten.aurora.boober.model.findSubHandlers
 import no.skatteetaten.aurora.boober.model.findSubKeys
 import no.skatteetaten.aurora.boober.model.findSubKeysExpanded
 import no.skatteetaten.aurora.boober.utils.addIfNotNull
+import no.skatteetaten.aurora.boober.utils.boolean
 import no.skatteetaten.aurora.boober.utils.ensureStartWith
 import no.skatteetaten.aurora.boober.utils.oneOf
 import no.skatteetaten.aurora.boober.utils.startsWith
@@ -33,6 +37,7 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
             AuroraConfigFieldHandler(
                 "route",
                 defaultValue = false,
+                validator = { it.boolean() },
                 canBeSimplifiedConfig = true
             ),
             AuroraConfigFieldHandler(
@@ -41,6 +46,7 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
             ),
             AuroraConfigFieldHandler(
                 "routeDefaults/tls/enabled",
+                validator = { it.boolean() },
                 defaultValue = false
             ),
             AuroraConfigFieldHandler(
@@ -58,8 +64,7 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
     override fun generate(adc: AuroraDeploymentSpec, cmd: AuroraContextCommand): Set<AuroraResource> {
 
         return getRoute(adc, cmd).map {
-            val resource = generateRoute(
-                route = it,
+            val resource = it.generateOpenShiftRoute(
                 routeNamespace = adc.namespace,
                 serviceName = adc.name,
                 routeSuffix = routeSuffix
@@ -138,39 +143,6 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
         }
     }
 
-    fun generateRoute(
-        route: no.skatteetaten.aurora.boober.feature.Route,
-        routeNamespace: String,
-        serviceName: String,
-        routeSuffix: String
-    ): Route {
-        return newRoute {
-            metadata {
-                name = route.objectName
-                namespace = routeNamespace
-                if (route.annotations.isNotEmpty()) {
-                    annotations = route.annotations.mapKeys { kv -> kv.key.replace("|", "/") }
-                }
-            }
-            spec {
-                to {
-                    kind = "Service"
-                    name = serviceName
-                }
-                route.tls?.let {
-                    tls {
-                        insecureEdgeTerminationPolicy = it.insecurePolicy.name
-                        termination = it.termination.name.toLowerCase()
-                    }
-                }
-                host = "${route.host}$routeSuffix"
-                route.path?.let {
-                    path = it
-                }
-            }
-        }
-    }
-
     fun findRouteHandlers(applicationFiles: List<AuroraConfigFile>): Set<AuroraConfigFieldHandler> {
 
         val routeHandlers = applicationFiles.findSubKeysExpanded("route")
@@ -178,11 +150,15 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
         return routeHandlers.flatMap { key ->
 
             listOf(
-                AuroraConfigFieldHandler("$key/enabled", defaultValue = true),
+                AuroraConfigFieldHandler(
+                    "$key/enabled",
+                    validator = { it.boolean() },
+                    defaultValue = true
+                ),
                 AuroraConfigFieldHandler("$key/host"),
                 AuroraConfigFieldHandler("$key/path",
                     validator = { it?.startsWith("/", "Path must start with /") }),
-                AuroraConfigFieldHandler("$key/tls/enabled"),
+                AuroraConfigFieldHandler("$key/tls/enabled", validator = { it.boolean() }),
                 AuroraConfigFieldHandler("$key/tls/insecurePolicy",
                     validator = { it.oneOf(InsecurePolicy.values().map { v -> v.name }, required = false) }),
                 AuroraConfigFieldHandler("$key/tls/termination",
@@ -190,20 +166,6 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
 
             ) + findRouteAnnotationHandlers(key, applicationFiles)
         }.toSet()
-    }
-
-    fun findRouteAnnotationHandlers(
-        prefix: String,
-        applicationFiles: List<AuroraConfigFile>
-    ): Set<AuroraConfigFieldHandler> {
-
-        return applicationFiles.findSubHandlers("$prefix/annotations", validatorFn = { key ->
-            {
-                if (key.contains("/")) {
-                    IllegalArgumentException("Annotation $key cannot contain '/'. Use '|' instead")
-                } else null
-            }
-        }).toSet()
     }
 
     override fun validate(
@@ -256,13 +218,15 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
         cmd: AuroraContextCommand
     ): Boolean {
 
-        val simplified = adc.isSimplifiedAndEnabled("route")
+        val simplified = adc.isSimplifiedConfig("route")
 
-        val expanded = cmd.applicationFiles.findSubKeys("route").any {
-            adc.getOrNull<Boolean>("route/$it/enabled") == true
+        if (simplified) {
+            return adc["route"]
         }
 
-        return simplified || expanded
+        return cmd.applicationFiles.findSubKeys("route").any {
+            adc.getOrNull<Boolean>("route/$it/enabled") == true
+        }
     }
 }
 
@@ -270,7 +234,7 @@ data class Route(
     val objectName: String,
     val host: String,
     val path: String? = null,
-    val annotations: Map<String, String>,
+    val annotations: Map<String, String> = emptyMap(),
     val tls: SecureRoute? = null
 ) {
     val target: String
@@ -280,6 +244,42 @@ data class Route(
         get(): String = if (tls != null) "https://" else "http://"
 
     fun url(urlSuffix: String) = "$host$urlSuffix".let { if (path != null) "$it${path.ensureStartWith("/")}" else it }
+
+    fun generateOpenShiftRoute(
+        routeNamespace: String,
+        serviceName: String,
+        routeSuffix: String
+    ): Route {
+        val route = this
+        return newRoute {
+            metadata {
+                name = route.objectName
+                namespace = routeNamespace
+                if (route.annotations.isNotEmpty()) {
+                    annotations = route.annotations.mapKeys { kv -> kv.key.replace("|", "/") }
+                }
+            }
+            spec {
+                to {
+                    kind = "Service"
+                    name = serviceName
+                }
+                route.tls?.let {
+                    tls {
+                        insecureEdgeTerminationPolicy = it.insecurePolicy.name
+                        termination = it.termination.name.toLowerCase()
+                    }
+                }
+                port {
+                    targetPort = IntOrString("http")
+                }
+                host = "${route.host}$routeSuffix"
+                route.path?.let {
+                    path = it
+                }
+            }
+        }
+    }
 }
 
 enum class InsecurePolicy {
@@ -294,3 +294,18 @@ data class SecureRoute(
     val insecurePolicy: InsecurePolicy,
     val termination: TlsTermination
 )
+
+fun findRouteAnnotationHandlers(
+    prefix: String,
+    applicationFiles: List<AuroraConfigFile>,
+    annotationsKey: String = "annotations"
+): Set<AuroraConfigFieldHandler> {
+
+    return applicationFiles.findSubHandlers("$prefix/$annotationsKey", validatorFn = { key ->
+        {
+            if (key.contains("/")) {
+                IllegalArgumentException("Annotation $key cannot contain '/'. Use '|' instead")
+            } else null
+        }
+    }).toSet()
+}

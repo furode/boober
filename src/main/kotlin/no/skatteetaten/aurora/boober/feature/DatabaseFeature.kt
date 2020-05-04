@@ -13,7 +13,6 @@ import io.fabric8.kubernetes.api.model.VolumeMount
 import java.io.ByteArrayOutputStream
 import java.util.Properties
 import mu.KotlinLogging
-import no.skatteetaten.aurora.boober.model.AuroraConfigException
 import no.skatteetaten.aurora.boober.model.AuroraConfigFieldHandler
 import no.skatteetaten.aurora.boober.model.AuroraConfigFile
 import no.skatteetaten.aurora.boober.model.AuroraContextCommand
@@ -37,6 +36,7 @@ import no.skatteetaten.aurora.boober.service.resourceprovisioning.SchemaRequestD
 import no.skatteetaten.aurora.boober.service.resourceprovisioning.SchemaUser
 import no.skatteetaten.aurora.boober.utils.ConditionalOnPropertyMissingOrEmpty
 import no.skatteetaten.aurora.boober.utils.addIfNotNull
+import no.skatteetaten.aurora.boober.utils.boolean
 import no.skatteetaten.aurora.boober.utils.ensureStartWith
 import no.skatteetaten.aurora.boober.utils.oneOf
 import org.apache.commons.codec.binary.Base64
@@ -59,7 +59,7 @@ class DatabaseDisabledFeature(
     ): List<Exception> {
         val databases = findDatabases(adc, cmd)
         if (databases.isNotEmpty()) {
-            return listOf(AuroraConfigException("Databases are not supported in this cluster"))
+            return listOf(IllegalArgumentException("Databases are not supported in this cluster"))
         }
         return emptyList()
     }
@@ -175,7 +175,7 @@ class DatabaseFeature(
             } else {
                 SchemaForAppRequest(
                     environment = adc.envName,
-                    application = adc.name,
+                    application = it.applicationLabel ?: adc.name,
                     details = details,
                     generate = it.generate
                 )
@@ -196,6 +196,7 @@ abstract class DatabaseFeatureTemplate(val cluster: String) : Feature {
         return (dbDefaultsHandlers + dbHandlers + listOf(
             AuroraConfigFieldHandler(
                 "database",
+                validator = { it.boolean() },
                 defaultValue = false,
                 canBeSimplifiedConfig = true
             )
@@ -214,7 +215,6 @@ abstract class DatabaseFeatureTemplate(val cluster: String) : Feature {
             instance = defaultInstance.copy(labels = defaultInstance.labels + mapOf("affiliation" to adc.affiliation)),
             roles = cmd.applicationFiles.associateSubKeys("$databaseDefaultsKey/roles", adc),
             exposeTo = cmd.applicationFiles.associateSubKeys("$databaseDefaultsKey/exposeTo", adc)
-
         )
         if (adc.isSimplifiedAndEnabled("database")) {
             return listOf(defaultDb)
@@ -266,7 +266,8 @@ abstract class DatabaseFeatureTemplate(val cluster: String) : Feature {
                     labels = instanceLabels
                 ),
                 roles = defaultDb.roles + roles,
-                exposeTo = defaultDb.exposeTo + exposeTo
+                exposeTo = defaultDb.exposeTo + exposeTo,
+                applicationLabel = adc.getOrNull("$key/applicationLabel")
             )
         }
     }
@@ -306,9 +307,10 @@ abstract class DatabaseFeatureTemplate(val cluster: String) : Feature {
     ): List<AuroraConfigFieldHandler> {
 
         val mainHandlers = listOf(
-            AuroraConfigFieldHandler("$db/enabled", defaultValue = true),
-            AuroraConfigFieldHandler("$db/generate"),
+            AuroraConfigFieldHandler("$db/enabled", defaultValue = true, validator = { it.boolean() }),
+            AuroraConfigFieldHandler("$db/generate", validator = { it.boolean() }),
             AuroraConfigFieldHandler("$db/name"),
+            AuroraConfigFieldHandler("$db/applicationLabel"),
             AuroraConfigFieldHandler("$db/id"),
             AuroraConfigFieldHandler(
                 "$db/flavor", validator = { node ->
@@ -338,6 +340,7 @@ abstract class DatabaseFeatureTemplate(val cluster: String) : Feature {
                 }),
             AuroraConfigFieldHandler(
                 "$databaseDefaultsKey/generate",
+                validator = { it.boolean() },
                 defaultValue = true
             ),
             AuroraConfigFieldHandler(
@@ -433,7 +436,8 @@ data class Database(
     val generate: Boolean,
     val exposeTo: Map<String, String> = emptyMap(),
     val roles: Map<String, DatabasePermission> = emptyMap(),
-    val instance: DatabaseInstance
+    val instance: DatabaseInstance,
+    val applicationLabel: String? = null
 )
 
 data class DatabaseInstance(

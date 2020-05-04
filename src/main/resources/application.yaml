@@ -15,10 +15,6 @@ spring:
 integrations:
     bitbucket:
         url: "https://git.aurora.skead.no/"
-    dbh:
-        url: "http://dbh"
-    skap:
-        url: "http://skap"
     cantus:
         url: "http://cantus"
     bigbird:
@@ -50,7 +46,13 @@ boober:
     openshift:
         tokenLocation: /var/run/secrets/kubernetes.io/serviceaccount/token
     route:
+<<<<<<< HEAD
         suffix: ".test-relay.skatteetaten.io"
+=======
+        suffix: ".${openshift.cluster}.paas.skead.no"
+    webseal:
+        suffix: ".amutv.skead.no"
+>>>>>>> master
 
 aurora:
     token:
@@ -77,8 +79,15 @@ server:
 spring:
     profiles: local
 
+
+management.server.port : 9091
+
+server:
+    port: 9090
+
 openshift:
     cluster: aws
+
 
 integrations:
     dbh:
@@ -87,6 +96,8 @@ integrations:
         url: http://cantus-aurora.${openshift.cluster}.paas.skead.no
     skap:
         url: http://localhost:9090
+    fiona:
+        url: http://fiona-aurora-dev.${openshift.cluster}.paas.skead.no
     openshift:
         port: 8443
         url: https://test-relay.skatteetaten.io/

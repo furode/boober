@@ -132,6 +132,16 @@
       "value" : "about-alternate.json"
     } ]
   },
+  "bigip" : {
+    "service" : {
+      "source" : "complex.json",
+      "value" : "simple-utv",
+      "sources" : [ {
+        "name" : "complex.json",
+        "value" : "simple-utv"
+      } ]
+    }
+  },
   "artifactId" : {
     "source" : "fileName",
     "value" : "complex",
@@ -511,6 +521,14 @@
   },
   "mounts" : {
     "aurora-token" : {
+      "enabled" : {
+        "source" : "default",
+        "value" : true,
+        "sources" : [ {
+          "name" : "default",
+          "value" : true
+        } ]
+      },
       "path" : {
         "source" : "complex.json",
         "value" : "/u01/secrets/app/aurora-token",
@@ -556,6 +574,14 @@
       }
     },
     "secret-mount" : {
+      "enabled" : {
+        "source" : "default",
+        "value" : true,
+        "sources" : [ {
+          "name" : "default",
+          "value" : true
+        } ]
+      },
       "path" : {
         "source" : "complex.json",
         "value" : "/u01/foo",
@@ -606,6 +632,14 @@
       }
     },
     "pvc" : {
+      "enabled" : {
+        "source" : "default",
+        "value" : true,
+        "sources" : [ {
+          "name" : "default",
+          "value" : true
+        } ]
+      },
       "path" : {
         "source" : "complex.json",
         "value" : "/foo",
@@ -849,10 +883,10 @@
     },
     "roles" : {
       "source" : "complex.json",
-      "value" : "admin dev @name@",
+      "value" : "admin,dev,@name@",
       "sources" : [ {
         "name" : "complex.json",
-        "value" : "admin dev @name@"
+        "value" : "admin,dev,@name@"
       } ]
     }
   }

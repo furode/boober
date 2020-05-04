@@ -60,11 +60,13 @@ class DeployFacadeTest : AbstractSpringBootAuroraConfigTest() {
         }
 
         dbhMock {
-            rule {
+            rule({
+                path.contains("application%3Dsimple")
+            }) {
                 MockResponse()
                     .setBody(loadBufferResource("dbhResponse.json"))
                     .setResponseCode(200)
-                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
             }
         }
 
@@ -120,7 +122,7 @@ class DeployFacadeTest : AbstractSpringBootAuroraConfigTest() {
             rule {
                 MockResponse().setResponseCode(200)
                     .setBody(body)
-                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
             }
         }
 
@@ -153,16 +155,16 @@ class DeployFacadeTest : AbstractSpringBootAuroraConfigTest() {
                 MockResponse()
                     .setBody(loadBufferResource("dbhResponse.json"))
                     .setResponseCode(200)
-                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
             }
         }
 
-        cantuMock {
+        cantusMock {
             rule {
                 MockResponse()
                     .setBody(""" { "success" : true }""")
                     .setResponseCode(200)
-                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
             }
         }
 
@@ -196,7 +198,7 @@ class DeployFacadeTest : AbstractSpringBootAuroraConfigTest() {
             rule {
                 MockResponse().setResponseCode(200)
                     .setBody(body)
-                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
             }
         }
 
@@ -214,10 +216,12 @@ class DeployFacadeTest : AbstractSpringBootAuroraConfigTest() {
         if (app == "complex") {
             assertThat(result.first().warnings).isEqualTo(
                 listOf(
-                    "Both Webseal-route and OpenShift-Route generated for application. If your application relies on WebSeal security this can be harmful!",
+                    "Both Webseal-route and OpenShift-Route generated for application. If your application relies on WebSeal security this can be harmful! Set webseal/strict to false to remove this warning.",
                     "Both sts and certificate feature has generated a cert. Turn off certificate if you are using the new STS service"
                 )
             )
+        } else {
+            assertThat(result.first().warnings.isEmpty())
         }
     }
 
@@ -290,7 +294,7 @@ class DeployFacadeTest : AbstractSpringBootAuroraConfigTest() {
                 MockResponse()
                     .setBody(loadBufferResource("dbhResponse.json"))
                     .setResponseCode(200)
-                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
+                    .setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
             }
         }
 

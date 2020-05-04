@@ -9,6 +9,7 @@
       "prometheus.io/port": "8081"
     },
     "labels": {
+      "operationScope": "aos-4016",
       "app": "web",
       "updatedBy": "hero",
       "updatedAt": "0",
@@ -31,10 +32,15 @@
     "ports": [
       {
         "name": "http",
-        "nodePort": 0,
         "port": 80,
         "protocol": "TCP",
         "targetPort": 8090
+      },
+      {
+        "name": "extra",
+        "port": 8082,
+        "protocol": "TCP",
+        "targetPort": 8082
       }
     ],
     "selector": {

@@ -14,6 +14,8 @@ utv/about-alternate.json | cluster: "utv"
                          | env:
 utv/about-alternate.json |   ttl: "1d"
         utv/complex.json | envFile: "about-alternate.json"
+                         | bigip:
+            complex.json |   service: "simple-utv"
                 fileName | artifactId: "complex"
             complex.json | groupId: "org.test"
             complex.json | version: "1"
@@ -78,4 +80,4 @@ utv/about-alternate.json |   ttl: "1d"
             complex.json | sts: true
                          | webseal:
             complex.json |   host: "test"
-            complex.json |   roles: "admin dev @name@"
+            complex.json |   roles: "admin,dev,@name@"

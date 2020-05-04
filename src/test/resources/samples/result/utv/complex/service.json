@@ -6,11 +6,10 @@
       "prometheus.io/scheme": "http",
       "prometheus.io/scrape": "true",
       "prometheus.io/path": "/prometheus",
-      "prometheus.io/port": "8082",
-      "sprocket.sits.no/service.webseal": "test",
-      "sprocket.sits.no/service.webseal-roles": "admin dev komplex"
+      "prometheus.io/port": "8082"
     },
     "labels": {
+      "operationScope": "aos-4016",
       "app": "komplex",
       "updatedBy": "hero",
       "updatedAt": "0",
@@ -33,10 +32,15 @@
     "ports": [
       {
         "name": "http",
-        "nodePort": 0,
         "port": 80,
         "protocol": "TCP",
         "targetPort": 8080
+      },
+      {
+        "name": "extra",
+        "port": 8082,
+        "protocol": "TCP",
+        "targetPort": 8082
       }
     ],
     "selector": {

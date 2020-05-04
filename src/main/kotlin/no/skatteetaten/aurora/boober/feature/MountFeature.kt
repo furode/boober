@@ -20,6 +20,7 @@ import no.skatteetaten.aurora.boober.service.openshift.OpenShiftClient
 import no.skatteetaten.aurora.boober.service.resourceprovisioning.VaultProvider
 import no.skatteetaten.aurora.boober.service.resourceprovisioning.VaultRequest
 import no.skatteetaten.aurora.boober.utils.addIfNotNull
+import no.skatteetaten.aurora.boober.utils.boolean
 import no.skatteetaten.aurora.boober.utils.ensureEndsWith
 import no.skatteetaten.aurora.boober.utils.ensureStartWith
 import no.skatteetaten.aurora.boober.utils.oneOf
@@ -40,6 +41,10 @@ class MountFeature(
         return mountKeys.flatMap { mountName ->
             listOf(
                 AuroraConfigFieldHandler(
+                    "mounts/$mountName/enabled",
+                    defaultValue = true,
+                    validator = { it.boolean() }),
+                AuroraConfigFieldHandler(
                     "mounts/$mountName/path",
                     validator = { it.required("Path is required for mount") }),
                 AuroraConfigFieldHandler(
@@ -55,6 +60,7 @@ class MountFeature(
                 ),
                 AuroraConfigFieldHandler(
                     "mounts/$mountName/exist",
+                    validator = { it.boolean() },
                     defaultValue = false
                 ),
                 AuroraConfigFieldHandler("mounts/$mountName/secretVault")
@@ -189,7 +195,9 @@ class MountFeature(
             name
         }.toSet()
 
-        return mountNames.map { mount ->
+        return mountNames.filter {
+            auroraDeploymentSpec["mounts/$it/enabled"]
+        }.map { mount ->
             val type: MountType = auroraDeploymentSpec["mounts/$mount/type"]
 
             val secretVaultName = auroraDeploymentSpec.getOrNull<String?>("mounts/$mount/secretVault")

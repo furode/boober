@@ -42,7 +42,7 @@
   },
   "webseal": {
     "host": "test",
-    "roles": "admin dev @name@"
+    "roles": "admin,dev,@name@"
   },
   "config": {
     "FOO": "BAR"
@@ -65,6 +65,9 @@
         "haproxy.router.openshift.io|timeout": "30s"
       }
     }
+  },
+  "bigip" : {
+    "service" : "simple-utv"
   },
   "liveness": true,
   "releaseTo": "komplex",

@@ -46,6 +46,7 @@ import no.skatteetaten.aurora.boober.model.Paths
 import no.skatteetaten.aurora.boober.model.PortNumbers
 import no.skatteetaten.aurora.boober.model.openshift.ApplicationDeployment
 import no.skatteetaten.aurora.boober.utils.addIfNotNull
+import no.skatteetaten.aurora.boober.utils.boolean
 import no.skatteetaten.aurora.boober.utils.ensureStartWith
 import no.skatteetaten.aurora.boober.utils.length
 import no.skatteetaten.aurora.boober.utils.normalizeLabels
@@ -60,6 +61,7 @@ val AuroraDeploymentSpec.name get(): String = this["name"]
 val AuroraDeploymentSpec.affiliation get(): String = this["affiliation"]
 val AuroraDeploymentSpec.type get(): TemplateType = this["type"]
 
+val AuroraDeploymentSpec.applicationDeploymentId: String get() = DigestUtils.sha1Hex("${this.namespace}/${this.name}")
 val AuroraDeploymentSpec.namespace
     get(): String {
         return when {
@@ -177,6 +179,7 @@ abstract class AbstractDeployFeature(
             AuroraConfigFieldHandler(
                 "prometheus",
                 defaultValue = true,
+                validator = { it.boolean() },
                 canBeSimplifiedConfig = true
             ),
             AuroraConfigFieldHandler(
@@ -188,6 +191,7 @@ abstract class AbstractDeployFeature(
             AuroraConfigFieldHandler(
                 "readiness",
                 defaultValue = true,
+                validator = { it.boolean() },
                 canBeSimplifiedConfig = true
             ),
             AuroraConfigFieldHandler("readiness/port", defaultValue = 8080),
@@ -196,6 +200,7 @@ abstract class AbstractDeployFeature(
             AuroraConfigFieldHandler("readiness/timeout", defaultValue = 1),
             AuroraConfigFieldHandler(
                 "liveness",
+                validator = { it.boolean() },
                 defaultValue = false,
                 canBeSimplifiedConfig = true
             ),
@@ -258,7 +263,12 @@ abstract class AbstractDeployFeature(
                         protocol = "TCP"
                         port = PortNumbers.HTTP_PORT
                         targetPort = IntOrString(PortNumbers.INTERNAL_HTTP_PORT)
-                        nodePort = 0
+                    },
+                    newServicePort {
+                        name = "extra"
+                        protocol = "TCP"
+                        port = PortNumbers.EXTRA_APPLICATION_PORT
+                        targetPort = IntOrString(PortNumbers.EXTRA_APPLICATION_PORT)
                     }
                 )
 
