@@ -46,13 +46,7 @@ boober:
     openshift:
         tokenLocation: /var/run/secrets/kubernetes.io/serviceaccount/token
     route:
-<<<<<<< HEAD
         suffix: ".test-relay.skatteetaten.io"
-=======
-        suffix: ".${openshift.cluster}.paas.skead.no"
-    webseal:
-        suffix: ".amutv.skead.no"
->>>>>>> master
 
 aurora:
     token:
