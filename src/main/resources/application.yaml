@@ -47,6 +47,8 @@ boober:
         tokenLocation: /var/run/secrets/kubernetes.io/serviceaccount/token
     route:
         suffix: ".test-relay.skatteetaten.io"
+    webseal:
+        suffix: ".foo"
 
 aurora:
     token:
@@ -74,10 +76,10 @@ spring:
     profiles: local
 
 
-management.server.port : 9091
+management.server.port : 8081
 
 server:
-    port: 9090
+    port: 8080
 
 openshift:
     cluster: aws
@@ -91,7 +93,7 @@ integrations:
     skap:
         url: http://localhost:9090
     fiona:
-        url: http://fiona-aurora-dev.${openshift.cluster}.paas.skead.no
+        url: http://fiona-aurora-dev1.${openshift.cluster}.paas.skead.no
     openshift:
         port: 8443
         url: https://test-relay.skatteetaten.io/
