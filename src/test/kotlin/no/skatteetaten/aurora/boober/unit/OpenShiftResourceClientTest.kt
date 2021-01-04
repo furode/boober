@@ -34,7 +34,8 @@ class OpenShiftResourceClientTest {
 
     @Test
     fun `Patch user annotation`() {
-        val response = """{ "metadata": { "annotations": { "foo": "bar" } } }"""
+        val response =
+            """{ "metadata": { "annotations": { "foo": "bar" } } }"""
 
         val request = server.execute(response) {
             val responseEntity = openShiftResourceClient.strategicMergePatch("user", "username", TextNode("{}"))

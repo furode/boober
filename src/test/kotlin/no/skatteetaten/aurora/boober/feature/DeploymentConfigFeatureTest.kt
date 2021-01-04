@@ -109,7 +109,9 @@ class DeploymentConfigFeatureTest : AbstractFeatureTest() {
         val (dcResource, adResource) = modifyResources(
             """{ 
                 "version" : "1"
-           }""", createEmptyDeploymentConfig(), createEmptyApplicationDeployment()
+           }""",
+            createEmptyDeploymentConfig(),
+            createEmptyApplicationDeployment()
         )
 
         assertThat(adResource).auroraResourceModifiedByThisFeatureWithComment("Added information from deployment")
@@ -128,7 +130,8 @@ class DeploymentConfigFeatureTest : AbstractFeatureTest() {
     fun `modify dc and ad for changed parameters`() {
 
         val (dcResource, adResource) = generateResources(
-            app = """{ 
+            app =
+                """{ 
                 
                 "version" : "1",
                 "releaseTo" : "test", 
@@ -157,7 +160,8 @@ class DeploymentConfigFeatureTest : AbstractFeatureTest() {
     fun `modify dc and ad for template application should not add resources`() {
 
         val (dcResource, _) = generateResources(
-            app = """{ 
+            app =
+                """{ 
                 "type" : "template",
                 "releaseTo" : "test", 
                 "splunkIndex" : "test",

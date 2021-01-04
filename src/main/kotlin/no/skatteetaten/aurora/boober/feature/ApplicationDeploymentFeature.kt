@@ -32,8 +32,10 @@ val AuroraDeploymentSpec.ttl: Duration? get() = this.getOrNull<String>("ttl")?.l
 
 private const val APPLICATION_DEPLOYMENT_COMMAND_CONTEXT_KEY = "applicationDeploymentCommand"
 
-private val FeatureContext.applicationDeploymentCommand: ApplicationDeploymentCommand get() = this.getContextKey(
-    APPLICATION_DEPLOYMENT_COMMAND_CONTEXT_KEY)
+private val FeatureContext.applicationDeploymentCommand: ApplicationDeploymentCommand
+    get() = this.getContextKey(
+        APPLICATION_DEPLOYMENT_COMMAND_CONTEXT_KEY
+    )
 
 val emailRegex: Pattern = compile(
     "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
@@ -70,7 +72,11 @@ class ApplicationDeploymentFeature : Feature {
         }
     }
 
-    override fun createContext(spec: AuroraDeploymentSpec, cmd: AuroraContextCommand, validationContext: Boolean): Map<String, Any> {
+    override fun createContext(
+        spec: AuroraDeploymentSpec,
+        cmd: AuroraContextCommand,
+        validationContext: Boolean
+    ): Map<String, Any> {
         return mapOf(
             APPLICATION_DEPLOYMENT_COMMAND_CONTEXT_KEY to ApplicationDeploymentCommand(
                 cmd.overrideFiles,
@@ -169,13 +175,12 @@ class ApplicationDeploymentFeature : Feature {
         resources.addEnvVarsToMainContainers(
             listOf(
                 EnvVar("APPLICATION_DEPLOYMENT_ID", adc.applicationDeploymentId, null)
-            ), this::class.java
+            ),
+            this::class.java
         )
         resources.forEach {
-            if (it.resource.metadata.namespace != null && it.resource.kind !in listOf(
-                    "ApplicationDeployment",
-                    "RoleBinding"
-                )
+            if (it.resource.metadata.namespace != null && it.resource.kind !in
+                listOf("ApplicationDeployment", "RoleBinding")
             ) {
                 modifyResource(it, "Set owner reference to ApplicationDeployment")
                 it.resource.metadata.ownerReferences = listOf(

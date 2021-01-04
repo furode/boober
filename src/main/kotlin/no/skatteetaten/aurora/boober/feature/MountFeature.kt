@@ -47,13 +47,16 @@ class MountFeature(
                 AuroraConfigFieldHandler(
                     "mounts/$mountName/enabled",
                     defaultValue = true,
-                    validator = { it.boolean() }),
+                    validator = { it.boolean() }
+                ),
                 AuroraConfigFieldHandler(
                     "mounts/$mountName/path",
-                    validator = { it.required("Path is required for mount") }),
+                    validator = { it.required("Path is required for mount") }
+                ),
                 AuroraConfigFieldHandler(
                     "mounts/$mountName/type",
-                    validator = { json -> json.oneOf(MountType.values().map { it.name }) }),
+                    validator = { json -> json.oneOf(MountType.values().map { it.name }) }
+                ),
                 AuroraConfigFieldHandler(
                     "mounts/$mountName/mountName",
                     defaultValue = mountName
@@ -72,7 +75,11 @@ class MountFeature(
         }.toSet()
     }
 
-    override fun createContext(spec: AuroraDeploymentSpec, cmd: AuroraContextCommand, validationContext: Boolean): Map<String, Any> {
+    override fun createContext(
+        spec: AuroraDeploymentSpec,
+        cmd: AuroraContextCommand,
+        validationContext: Boolean
+    ): Map<String, Any> {
         return mapOf(MOUNTS_CONTEXT_KEY to getMounts(spec, cmd))
     }
 
@@ -181,12 +188,7 @@ class MountFeature(
 
     private fun validateExistingMounts(mounts: List<Mount>, adc: AuroraDeploymentSpec): List<Exception> {
         return mounts.filter { it.exist }.mapNotNull {
-            if (!openShiftClient.resourceExists(
-                    kind = it.type.kind,
-                    namespace = adc.namespace,
-                    name = it.volumeName
-                )
-            ) {
+            if (!openShiftClient.resourceExists(it.type.kind, adc.namespace, it.volumeName)) {
                 AuroraDeploymentSpecValidationException("Required existing resource with type=${it.type} namespace=${adc.namespace} name=${it.volumeName} does not exist.")
             } else null
         }

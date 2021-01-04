@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Test
 
 class PropertiesUtilTest {
 
-    val props = """#a text line
+    val props =
+        """#a text line
     foo=bar
     username=user
     password=pass

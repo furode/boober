@@ -56,7 +56,8 @@ class BigIpFeatureTest : AbstractFeatureTest() {
                 "haproxy.router.openshift.io|timeout" : "30s"
                }
             }
-        }""", createdResources = 2
+        }""",
+            createdResources = 2
         )
 
         assertThat(routeResource).auroraResourceCreatedByThisFeature()

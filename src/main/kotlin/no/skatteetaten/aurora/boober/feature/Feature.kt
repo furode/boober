@@ -158,40 +158,50 @@ val ApplicationDeploymentRef.headerHandlers: Set<AuroraConfigFieldHandler>
         return setOf(
             AuroraConfigFieldHandler(
                 "schemaVersion",
-                validator = { it.oneOf(validSchemaVersions) }),
+                validator = { it.oneOf(validSchemaVersions) }
+            ),
             AuroraConfigFieldHandler(
                 "type",
-                validator = { node -> node.oneOf(TemplateType.values().map { it.toString() }) }),
+                validator = { node -> node.oneOf(TemplateType.values().map { it.toString() }) }
+            ),
 
             // The value for jobs here will be wrong, but we do not use deployState for jobs.
             AuroraConfigFieldHandler(
                 "deployState",
                 defaultValue = "deploymentConfig",
-                validator = { node -> node.oneOf(DeploymentState.values().map { it.toString() }) }),
+                validator = { node -> node.oneOf(DeploymentState.values().map { it.toString() }) }
+            ),
             AuroraConfigFieldHandler(
                 "applicationPlatform",
                 defaultValue = "java",
-                validator = { node -> node.oneOf(ApplicationPlatform.values().map { it.toString() }) }),
-            AuroraConfigFieldHandler("affiliation", validator = {
-                it.pattern(
-                    "^[a-z]{1,10}$",
-                    "Affiliation can only contain letters and must be no longer than 10 characters"
-                )
-            }),
+                validator = { node -> node.oneOf(ApplicationPlatform.values().map { it.toString() }) }
+            ),
+            AuroraConfigFieldHandler(
+                "affiliation",
+                validator = {
+                    it.pattern(
+                        "^[a-z]{1,10}$",
+                        "Affiliation can only contain letters and must be no longer than 10 characters"
+                    )
+                }
+            ),
             AuroraConfigFieldHandler("segment"),
             AuroraConfigFieldHandler(
                 "cluster",
-                validator = { it.notBlank("Cluster must be set") }),
+                validator = { it.notBlank("Cluster must be set") }
+            ),
             AuroraConfigFieldHandler("permissions/admin"),
             AuroraConfigFieldHandler("permissions/view"),
             AuroraConfigFieldHandler("permissions/adminServiceAccount"),
             // Max length of OpenShift project names is 63 characters. Project name = affiliation + "-" + envName.
             AuroraConfigFieldHandler(
-                "envName", validator = { it.pattern(envNamePattern, envNameMessage) },
+                "envName",
+                validator = { it.pattern(envNamePattern, envNameMessage) },
                 defaultSource = "folderName",
                 defaultValue = this.environment
             ),
-            AuroraConfigFieldHandler("name",
+            AuroraConfigFieldHandler(
+                "name",
                 defaultValue = this.application,
                 defaultSource = "fileName",
                 validator = {
@@ -200,10 +210,12 @@ val ApplicationDeploymentRef.headerHandlers: Set<AuroraConfigFieldHandler>
                         "Name must be alphanumeric and no more than 40 characters",
                         false
                     )
-                }),
+                }
+            ),
             AuroraConfigFieldHandler(
                 "env/name",
-                validator = { it.pattern(envNamePattern, envNameMessage, false) }),
+                validator = { it.pattern(envNamePattern, envNameMessage, false) }
+            ),
             AuroraConfigFieldHandler("env/ttl", validator = { it.durationString() }),
             AuroraConfigFieldHandler("baseFile"),
             AuroraConfigFieldHandler("envFile"),

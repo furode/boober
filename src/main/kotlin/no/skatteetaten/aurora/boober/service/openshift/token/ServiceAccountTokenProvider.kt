@@ -1,8 +1,5 @@
 package no.skatteetaten.aurora.boober.service.openshift.token
 
-import com.google.common.base.Supplier
-import com.google.common.base.Suppliers
-import com.google.common.io.Files
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -24,8 +21,6 @@ class ServiceAccountTokenProvider(
     @Value("\${boober.openshift.tokenLocation}") val tokenLocation: String
 ) : TokenProvider {
 
-    private val tokenSupplier: Supplier<String> = Suppliers.memoize({ readToken() })
-
     /**
      * Get the Application Token by using the specified tokenOverride if it is set, or else reads the token from the
      * specified file system path. Any value used will be cached forever, so potential changes on the file system will
@@ -33,15 +28,21 @@ class ServiceAccountTokenProvider(
      *
      * @return
      */
-    override fun getToken() = tokenSupplier.get()
+    override fun getToken() = lazyValue
+
+    val lazyValue: String by lazy {
+       readToken()
+    }
 
     private fun readToken(): String {
         logger.info("Reading application token from tokenLocation={}", tokenLocation)
         try {
-            val token: String = Files.toString(File(tokenLocation), Charsets.UTF_8).trimEnd()
+            val token: String= File(tokenLocation).readText().trim()
             logger.trace(
-                "Read token with length={}, firstLetter={}, lastLetter={}", token.length,
-                token[0], token[token.length - 1]
+                "Read token with length={}, firstLetter={}, lastLetter={}",
+                token.length,
+                token[0],
+                token[token.length - 1]
             )
             return token
         } catch (e: IOException) {

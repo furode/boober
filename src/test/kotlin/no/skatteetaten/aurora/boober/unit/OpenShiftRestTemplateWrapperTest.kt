@@ -41,7 +41,8 @@ class OpenShiftRestTemplateWrapperTest : ResourceLoader() {
             200 to resource
         ) {
             val entity: ResponseEntity<JsonNode> = restTemplateWrapper.exchange(
-                RequestEntity<Any>(HttpMethod.GET, URI(resourceUrl)), true
+                RequestEntity<Any>(HttpMethod.GET, URI(resourceUrl)),
+                true
             )
 
             compareJson(resource, entity.body!!)
@@ -57,7 +58,8 @@ class OpenShiftRestTemplateWrapperTest : ResourceLoader() {
         ) {
             assertThat {
                 restTemplateWrapper.exchange(
-                    RequestEntity<Any>(HttpMethod.GET, URI(resourceUrl)), true
+                    RequestEntity<Any>(HttpMethod.GET, URI(resourceUrl)),
+                    true
                 )
             }.isFailure().all {
                 isInstanceOf(HttpClientErrorException::class)
@@ -73,7 +75,8 @@ class OpenShiftRestTemplateWrapperTest : ResourceLoader() {
         ) {
             assertThat {
                 restTemplateWrapper.exchange(
-                    RequestEntity<Any>(HttpMethod.GET, URI(resourceUrl)), false
+                    RequestEntity<Any>(HttpMethod.GET, URI(resourceUrl)),
+                    false
                 )
             }.isFailure().all {
                 isInstanceOf(HttpClientErrorException::class)

@@ -176,7 +176,9 @@ class OpenShiftDeployer(
         logger.debug("Apply objects")
         val openShiftResponses: List<OpenShiftResponse> = listOf(applicationResult) +
             applyOpenShiftApplicationObjects(
-                cmd, projectExist, ownerReferenceUid
+                cmd,
+                projectExist,
+                ownerReferenceUid
             )
 
         logger.debug("done applying objects")
@@ -205,7 +207,9 @@ class OpenShiftDeployer(
         if (!redeployResult.success) {
             return result.copy(
                 openShiftResponses = openShiftResponses.addIfNotNull(redeployResult.openShiftResponses),
-                tagResponse = tagResult, success = false, reason = redeployResult.message
+                tagResponse = tagResult,
+                success = false,
+                reason = redeployResult.message
             )
         }
 

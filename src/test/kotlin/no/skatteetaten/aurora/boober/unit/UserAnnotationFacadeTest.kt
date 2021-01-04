@@ -45,7 +45,8 @@ class UserAnnotationFacadeTest {
 
     @Test
     fun `Get user annotations where value is base64 encoded and json`() {
-        val entry = """{"key1":"value1"}""".toBase64()
+        val entry =
+            """{"key1":"value1"}""".toBase64()
 
         every {
             openShiftResourceClient.get("user", name = "username")
@@ -57,7 +58,8 @@ class UserAnnotationFacadeTest {
 
     @Test
     fun `Get user annotations where value is base64 encoded and text`() {
-        val entry = """test value""".toBase64()
+        val entry =
+            """test value""".toBase64()
 
         every {
             openShiftResourceClient.get("user", name = "username")

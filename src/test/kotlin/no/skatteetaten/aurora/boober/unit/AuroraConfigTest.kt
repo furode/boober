@@ -38,7 +38,8 @@ class AuroraConfigTest : ResourceLoader() {
     fun `Should update file`() {
 
         val auroraConfig = createAuroraConfig(aid)
-        val updates = """{ "version": "4"}"""
+        val updates =
+            """{ "version": "4"}"""
 
         val updateFileResponse = auroraConfig.updateFile("booberdev/console.json", updates)
         val updatedAuroraConfig = updateFileResponse.second
@@ -83,7 +84,8 @@ class AuroraConfigTest : ResourceLoader() {
 
         val auroraConfig = createAuroraConfig(aid)
 
-        val updates = """{ "version": "4"}"""
+        val updates =
+            """{ "version": "4"}"""
         val fileName = "boobertest/console.json"
 
         assertThat(auroraConfig.files.find { it.name == fileName }).isNull()
@@ -192,7 +194,8 @@ class AuroraConfigTest : ResourceLoader() {
         val fileName = "utv/simple.json"
         assertThat(auroraConfig.files.find { it.name == fileName }).isNotNull()
 
-        val fileContent = """{ "version" : 1 }"""
+        val fileContent =
+            """{ "version" : 1 }"""
         val newAuroraConfig =
             AuroraConfig(listOf(AuroraConfigFile(fileName, contents = fileContent)), auroraConfig.name, "local")
 
@@ -208,7 +211,8 @@ class AuroraConfigTest : ResourceLoader() {
         val fileName = "new-app.json"
         assertThat(auroraConfig.files.find { it.name == fileName }).isNull()
 
-        val fileContent = """{ "groupId" : "foo.bar" }"""
+        val fileContent =
+            """{ "groupId" : "foo.bar" }"""
         val newAuroraConfig =
             AuroraConfig(listOf(AuroraConfigFile(fileName, contents = fileContent)), auroraConfig.name, "local")
 
@@ -233,7 +237,8 @@ class AuroraConfigTest : ResourceLoader() {
 
         val auroraConfigFile = AuroraConfigFile(
             name = "foo.yoda",
-            contents = """
+            contents =
+                """
               replicas:3
               type: "deploy"
               certificate: false""".trimMargin()
@@ -248,7 +253,8 @@ class AuroraConfigTest : ResourceLoader() {
 
         val auroraConfigFile = AuroraConfigFile(
             name = "foo.yaml",
-            contents = """
+            contents =
+                """
               replicas:3
               type: "deploy"
               certificate: false""".trimMargin()

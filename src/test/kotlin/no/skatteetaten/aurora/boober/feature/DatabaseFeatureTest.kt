@@ -69,7 +69,8 @@ class DatabaseFeatureTest : AbstractFeatureTest() {
         val (adResource, dcResource, secretResource) = generateResources(
             """{ 
                "database" : true
-           }""", resources = mutableSetOf(createEmptyApplicationDeployment(), createEmptyDeploymentConfig())
+           }""",
+            resources = mutableSetOf(createEmptyApplicationDeployment(), createEmptyDeploymentConfig())
         )
 
         assertThat(dcResource).auroraDatabaseMounted(listOf(secretResource))
@@ -139,7 +140,8 @@ class DatabaseFeatureTest : AbstractFeatureTest() {
                     }
                   }
                 }
-           }""", resources = mutableSetOf(createEmptyApplicationDeployment(), createEmptyDeploymentConfig())
+           }""",
+            resources = mutableSetOf(createEmptyApplicationDeployment(), createEmptyDeploymentConfig())
         )
 
         assertThat(dcResource).auroraDatabaseMounted(listOf(secretResource))
@@ -159,7 +161,8 @@ class DatabaseFeatureTest : AbstractFeatureTest() {
                "database" : {
                  "simple" : "123456"
                 }
-           }""", resources = mutableSetOf(createEmptyApplicationDeployment(), createEmptyDeploymentConfig())
+           }""",
+            resources = mutableSetOf(createEmptyApplicationDeployment(), createEmptyDeploymentConfig())
         )
 
         assertThat(dcResource).auroraDatabaseMounted(listOf(secretResource))
@@ -203,7 +206,8 @@ class DatabaseFeatureTest : AbstractFeatureTest() {
                     },
                     "cluster": "notsamecluster",
                    "database": true
-                   } """.trimIndent()
+                   } 
+                """.trimIndent()
             )
         }.isSuccess()
     }

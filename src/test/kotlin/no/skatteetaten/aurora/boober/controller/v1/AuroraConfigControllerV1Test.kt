@@ -85,13 +85,15 @@ class AuroraConfigControllerV1Test : AbstractControllerTest() {
 
         val fileName = "simple.json"
 
-        val patch = """[{
+        val patch =
+            """[{
             "op": "add",
             "path": "/version",
             "value": "test"
         }]"""
 
-        val content = """{ "version" : "test" }"""
+        val content =
+            """{ "version" : "test" }"""
         every {
             facade.patchAuroraConfigFile(auroraConfigRef, fileName, patch)
         } returns AuroraConfigFile(fileName, content)
@@ -129,7 +131,9 @@ class AuroraConfigControllerV1Test : AbstractControllerTest() {
         mockMvc.get(
             Path(
                 "/v1/auroraconfig/{auroraConfigName}?environment={env}&application={app}",
-                auroraConfigRef.name, adr.environment, adr.application
+                auroraConfigRef.name,
+                adr.environment,
+                adr.application
             )
         ) {
             statusIsOk()
@@ -151,7 +155,9 @@ class AuroraConfigControllerV1Test : AbstractControllerTest() {
         mockMvc.get(
             Path(
                 "/v1/auroraconfig/{auroraConfigName}/files/{env}/{app}",
-                auroraConfigRef.name, adr.environment, adr.application
+                auroraConfigRef.name,
+                adr.environment,
+                adr.application
             )
         ) {
             statusIsOk()
@@ -199,7 +205,8 @@ class AuroraConfigControllerV1Test : AbstractControllerTest() {
 
         // This cannot contain a /, the wiremock test framework we use here will not support it
         val fileName = "simple.json"
-        val content = """{ "version" : "test" }"""
+        val content =
+            """{ "version" : "test" }"""
 
         every {
             facade.updateAuroraConfigFile(auroraConfigRef, fileName, content, null)
@@ -290,7 +297,8 @@ class AuroraConfigControllerV1Test : AbstractControllerTest() {
             facade.validateAuroraConfig(
                 localAuroraConfig = any(),
                 resourceValidation = false,
-                auroraConfigRef = auroraConfigRef, mergeWithRemoteConfig = true
+                auroraConfigRef = auroraConfigRef,
+                mergeWithRemoteConfig = true
             )
         } returns emptyMap()
 

@@ -71,7 +71,9 @@ class S3FeatureTest : AbstractFeatureTest() {
     @Test
     fun `verify is able to disable s3 when expanded config`() {
         mockHerkimer(
-            booberAdId, true, s3Credentials = listOf(
+            booberAdId,
+            true,
+            s3Credentials = listOf(
                 createS3Credentials("anotherId", "default"),
                 createS3Credentials("minBucket", "hello-$environment")
             )
@@ -270,7 +272,7 @@ class S3FeatureTest : AbstractFeatureTest() {
                     "accessKey": "accessKey",
                     "secretKey": "secretKey"
                     }
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }
         }

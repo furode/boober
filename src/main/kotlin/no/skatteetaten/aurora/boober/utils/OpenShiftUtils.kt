@@ -1,12 +1,21 @@
 package no.skatteetaten.aurora.boober.utils
 
 val kubernetesNonApiGroupResources = setOf(
-    "namespace", "service", "configmap", "secret", "serviceaccount",
-    "replicationcontroller", "persistentvolumeclaim", "pod"
+    "namespace",
+    "service",
+    "configmap",
+    "secret",
+    "serviceaccount",
+    "replicationcontroller",
+    "persistentvolumeclaim",
+    "pod"
 )
 
 val nonGettableResources = setOf(
-    "processedtemplate", "deploymentrequest", "imagestreamimport", "job"
+    "processedtemplate",
+    "deploymentrequest",
+    "imagestreamimport",
+    "job"
 )
 
 val kindsWithoutNamespace = listOf(

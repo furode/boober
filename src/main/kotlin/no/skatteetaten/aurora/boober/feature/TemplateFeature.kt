@@ -21,14 +21,17 @@ class TemplateFeature(
         auroraConfig: AuroraConfig
     ): Set<AuroraConfigFieldHandler> {
         return setOf(
-            AuroraConfigFieldHandler("template", validator = { json ->
-                val template = json?.textValue()
-                if (template == null) {
-                    IllegalArgumentException("Template is required")
-                } else {
-                    null
+            AuroraConfigFieldHandler(
+                "template",
+                validator = { json ->
+                    val template = json?.textValue()
+                    if (template == null) {
+                        IllegalArgumentException("Template is required")
+                    } else {
+                        null
+                    }
                 }
-            })
+            )
         )
     }
 

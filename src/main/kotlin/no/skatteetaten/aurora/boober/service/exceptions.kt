@@ -29,7 +29,8 @@ class MultiApplicationValidationException(
         return this.errors.flatMap {
             it.errors.map { t ->
                 ApplicationError(
-                    it.command.applicationDeploymentRef.application, it.command.applicationDeploymentRef.environment,
+                    it.command.applicationDeploymentRef.application,
+                    it.command.applicationDeploymentRef.environment,
                     when (t) {
                         is AuroraConfigException -> t.errors
                         is IllegalArgumentException -> listOf(ConfigFieldErrorDetail.illegal(t.message ?: ""))

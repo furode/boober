@@ -66,7 +66,10 @@ class VaultControllerV1(
     ): Response {
 
         val vault = vaultService.import(
-            vaultCollection, vaultPayload.name, vaultPayload.permissions, vaultPayload.secretsDecoded
+            vaultCollection,
+            vaultPayload.name,
+            vaultPayload.permissions,
+            vaultPayload.secretsDecoded
         )
         return Response(items = listOf(vault).map(::fromEncryptedFileVault))
     }

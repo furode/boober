@@ -110,11 +110,13 @@ val JsonNode.openshiftKind: String
 
 val JsonNode.openshiftName: String
     get() = when (this.openshiftKind) {
-        "deploymentrequest" -> this.get("name")?.asText()
-            ?: throw IllegalArgumentException("name not specified for resource kind=${this.openshiftKind}")
-        else -> this.get("metadata")?.get("name")?.asText()
-            ?: this.get("metadata")?.get("generateName")?.asText()
-            ?: throw IllegalArgumentException("name not specified for resource kind=${this.openshiftKind}")
+        "deploymentrequest" ->
+            this.get("name")?.asText()
+                ?: throw IllegalArgumentException("name not specified for resource kind=${this.openshiftKind}")
+        else ->
+            this.get("metadata")?.get("name")?.asText()
+                ?: this.get("metadata")?.get("generateName")?.asText()
+                ?: throw IllegalArgumentException("name not specified for resource kind=${this.openshiftKind}")
     }
 
 fun JsonNode.updateField(source: JsonNode, root: String, field: String, required: Boolean = false) {

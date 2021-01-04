@@ -53,7 +53,8 @@ class AuroraConfigControllerV2Test : AbstractControllerTest() {
             facade.updateAuroraConfigFile(any(), any(), any(), any())
         } returns AuroraConfigFile("myName", "myContents")
 
-        val payload = """{ "version": "test" }"""
+        val payload =
+            """{ "version": "test" }"""
         val fileName = "file/name.json"
 
         mockMvc.put(
@@ -82,7 +83,8 @@ class AuroraConfigControllerV2Test : AbstractControllerTest() {
             )
         )
 
-        val payload = """{ "abc": "cba" }"""
+        val payload =
+            """{ "abc": "cba" }"""
         val fileName = "file/name.txt"
 
         mockMvc.put(

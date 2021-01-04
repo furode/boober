@@ -77,7 +77,9 @@ class AuroraDeploymentSpecControllerV1Test : AbstractControllerTest() {
         mockMvc.get(
             Path(
                 "/v1/auroradeployspec/{name}/{env}/{app}/formatted",
-                auroraConfigRef.name, adr.environment, adr.application
+                auroraConfigRef.name,
+                adr.environment,
+                adr.application
             )
         ) {
             statusIsOk()

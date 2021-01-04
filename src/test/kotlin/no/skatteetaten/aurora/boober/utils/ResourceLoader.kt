@@ -238,13 +238,17 @@ class AuroraConfigSamples {
         ): AuroraConfig {
             val files = getSampleFiles(aid, additionalFile)
 
-            return AuroraConfig(files.map {
-                AuroraConfigFile(
-                    it.key,
-                    it.value,
-                    false
-                )
-            }, affiliation, refName)
+            return AuroraConfig(
+                files.map {
+                    AuroraConfigFile(
+                        it.key,
+                        it.value,
+                        false
+                    )
+                },
+                affiliation,
+                refName
+            )
         }
 
         fun getAuroraConfigSamples(): AuroraConfig {
@@ -257,13 +261,18 @@ class AuroraConfigSamples {
                 it.key to it.value.readText(Charset.defaultCharset())
             }.toMap()
 
-            return AuroraConfig(nodes.map {
-                AuroraConfigFile(
-                    it.key,
-                    it.value,
-                    false
-                )
-            }, "paas", "master", "")
+            return AuroraConfig(
+                nodes.map {
+                    AuroraConfigFile(
+                        it.key,
+                        it.value,
+                        false
+                    )
+                },
+                "paas",
+                "master",
+                ""
+            )
         }
 
         fun getSampleFiles(aid: ApplicationDeploymentRef, additionalFile: String? = null): Map<String, String> {

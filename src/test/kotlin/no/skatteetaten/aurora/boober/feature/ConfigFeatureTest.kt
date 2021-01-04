@@ -10,7 +10,8 @@ class ConfigFeatureTest : AbstractFeatureTest() {
     override val feature: Feature
         get() = ConfigFeature()
 
-    val auroraConfigAppFile = """{ 
+    val auroraConfigAppFile =
+        """{ 
                "config": {
                  "JSON_ARRAY" : "[ { uri: \"http://tsl0part-fk1-s-adm01:20000/registry\", urn: [\"urn:skatteetaten:part:identifikasjon:partsidentifikasjon:root\"], segment: \"part\" }, { uri: \"http://tsl0part-fk1-s-adm01:20000/registry\", urn: [\"urn:skatteetaten:part:partsregister:feed:*\"], segment: \"part\" } , { uri: \"http://tsl0part-fk1-s-adm01:20000/registry\", urn: [\"urn:skatteetaten:part:partsregister:hendelselager:*\"], segment: \"part\" } , { uri: \"http://tsl0part-fk1-s-adm01:20000/registry\", urn: [\"no:skatteetaten:sikkerhet:tilgangskontroll:ats:v1\"], segment: \"part\" } ]",
                  "STRING": "Hello",
@@ -27,7 +28,8 @@ class ConfigFeatureTest : AbstractFeatureTest() {
     fun `modify dc and add config`() {
 
         val resources = modifyResources(
-            auroraConfigAppFile, createEmptyDeploymentConfig()
+            auroraConfigAppFile,
+            createEmptyDeploymentConfig()
         )
 
         val dcResource = resources.first()

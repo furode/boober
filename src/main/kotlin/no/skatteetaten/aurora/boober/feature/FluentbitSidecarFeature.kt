@@ -160,7 +160,8 @@ class FluentbitSidecarFeature(
             template.metadata.annotations = mutableMapOf(annotationKey to annotationValue)
         } else {
             template.metadata.annotations.put(
-                annotationKey, annotationValue
+                annotationKey,
+                annotationValue
             )
         }
     }
@@ -230,10 +231,12 @@ class FluentbitSidecarFeature(
                 newVolumeMount {
                     name = adc.fluentParserName
                     mountPath = parserMountPath
-                }, newVolumeMount {
+                },
+                newVolumeMount {
                     name = adc.fluentConfigName
                     mountPath = "/fluent-bit/etc"
-                }, loggingMount
+                },
+                loggingMount
             )
             resources {
                 limits = mapOf(

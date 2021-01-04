@@ -120,15 +120,17 @@ class DeployFacadeTest(@Value("\${application.deployment.id}") val booberAdId: S
             rule({ method == "GET" }) {
                 path?.let { it ->
                     if (it.endsWith("/projects/paas-utv")) {
-                        json(newProject {
-                            metadata {
-                                name = "paas-utv"
-                                labels = mapOf("affiliation" to "paas")
+                        json(
+                            newProject {
+                                metadata {
+                                    name = "paas-utv"
+                                    labels = mapOf("affiliation" to "paas")
+                                }
+                                status {
+                                    phase = "Active"
+                                }
                             }
-                            status {
-                                phase = "Active"
-                            }
-                        })
+                        )
                     } else if (it.endsWith("/applicationdeployments/easy")) {
                         val ad = resultFiles["applicationdeployment/easy"]!!
                         (ad.at("/metadata") as ObjectNode).replace("uid", TextNode("old-124"))
@@ -298,11 +300,13 @@ class DeployFacadeTest(@Value("\${application.deployment.id}") val booberAdId: S
 
         assertThat {
             facade.executeDeploy(
-                auroraConfigRef, listOf(ApplicationDeploymentRef("utv", "simple")),
+                auroraConfigRef,
+                listOf(ApplicationDeploymentRef("utv", "simple")),
                 overrides = listOf(
                     AuroraConfigFile(
                         "utv/about.json",
-                        contents = """{ "cluster" : "test" }""",
+                        contents =
+                            """{ "cluster" : "test" }""",
                         override = true
                     )
                 )
@@ -325,11 +329,13 @@ class DeployFacadeTest(@Value("\${application.deployment.id}") val booberAdId: S
 
         assertThat {
             facade.executeDeploy(
-                auroraConfigRef, listOf(ApplicationDeploymentRef("utv", "simple")),
+                auroraConfigRef,
+                listOf(ApplicationDeploymentRef("utv", "simple")),
                 overrides = listOf(
                     AuroraConfigFile(
                         "utv/foobar.json",
-                        contents = """{ "version" : "test" }""",
+                        contents =
+                            """{ "version" : "test" }""",
                         override = true
                     )
                 )
@@ -362,11 +368,13 @@ class DeployFacadeTest(@Value("\${application.deployment.id}") val booberAdId: S
 
         assertThat {
             facade.executeDeploy(
-                auroraConfigRef, listOf(ApplicationDeploymentRef("utv", "ah")),
+                auroraConfigRef,
+                listOf(ApplicationDeploymentRef("utv", "ah")),
                 overrides = listOf(
                     AuroraConfigFile(
                         "utv/ah.json",
-                        contents = """{ "route" : "true" }""",
+                        contents =
+                            """{ "route" : "true" }""",
                         override = true
                     )
                 )

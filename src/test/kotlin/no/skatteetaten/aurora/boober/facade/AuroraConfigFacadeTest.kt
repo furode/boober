@@ -86,7 +86,8 @@ class AuroraConfigFacadeTest(
                 AuroraConfigFile(
                     "utv/simple.json",
                     override = true,
-                    contents = """{ "version" : "foo" }"""
+                    contents =
+                        """{ "version" : "foo" }"""
                 )
             ),
             errorsAsWarnings = false
@@ -105,7 +106,8 @@ class AuroraConfigFacadeTest(
                 AuroraConfigFile(
                     "utv/about.json",
                     override = true,
-                    contents = """{ "type" : "deploy" }"""
+                    contents =
+                        """{ "type" : "deploy" }"""
                 )
             ),
             errorsAsWarnings = true
@@ -125,7 +127,8 @@ class AuroraConfigFacadeTest(
                     AuroraConfigFile(
                         "utv/about.json",
                         override = true,
-                        contents = """{ "type" : "deploy" }"""
+                        contents =
+                            """{ "type" : "deploy" }"""
                     )
                 ),
                 errorsAsWarnings = false
@@ -244,15 +247,18 @@ class AuroraConfigFacadeTest(
             }
         }
         val config = getAuroraConfigSamples()
-        val newConfig = config.copy(files = config.files.filter { it.name != "utv/ah.json" } + AuroraConfigFile(
-            "utv/ah.json", """
+        val newConfig = config.copy(
+            files = config.files.filter { it.name != "utv/ah.json" } + AuroraConfigFile(
+                "utv/ah.json",
+                """
             {
             "config" : {
                "FOO" : "BAR", 
                "BAR" : "BAZ",
             }
         """
-        ))
+            )
+        )
 
         assertThat {
             facade.validateAuroraConfig(
@@ -329,14 +335,18 @@ class AuroraConfigFacadeTest(
             }
         }
         val config = getAuroraConfigSamples()
-        val newConfig = config.copy(files = config.files.filter { it.name != "utv/simple.json" } + AuroraConfigFile(
-            "utv/simple.yaml", """
+        val newConfig = config.copy(
+            files = config.files.filter { it.name != "utv/simple.json" } + AuroraConfigFile(
+                "utv/simple.yaml",
+                """
               "bigip" : {
                 "service" : "simple-utv",
                 "externalHost" :"test.ske",
                 "apiPaths": ["/api"]
-              }""".trimIndent()
-        ))
+              }
+                """.trimIndent()
+            )
+        )
 
         val validated = facade.validateAuroraConfig(
             newConfig,
@@ -362,11 +372,13 @@ class AuroraConfigFacadeTest(
             }
         }
         val config = getAuroraConfigSamples()
-        val newConfig = config.copy(files = config.files
-            .filter { it.name != "utv/simple.json" }
-            .filter { it.name != "utv/whoami.json" } +
-            AuroraConfigFile(
-                "utv/simple.json", """
+        val newConfig = config.copy(
+            files = config.files
+                .filter { it.name != "utv/simple.json" }
+                .filter { it.name != "utv/whoami.json" } +
+                AuroraConfigFile(
+                    "utv/simple.json",
+                    """
               {
                 "route" : {
                     "simple" : {
@@ -374,10 +386,12 @@ class AuroraConfigFacadeTest(
                         "fullyQualifiedHost" : true
                     }
                 }
-              }""".trimIndent()
-            ) +
-            AuroraConfigFile(
-                "utv/whoami.json", """
+              }
+                    """.trimIndent()
+                ) +
+                AuroraConfigFile(
+                    "utv/whoami.json",
+                    """
               {
                 "route" : {
                     "whoami" : {
@@ -385,8 +399,10 @@ class AuroraConfigFacadeTest(
                         "fullyQualifiedHost" : true
                     }
                 }
-              }""".trimIndent()
-            ))
+              }
+                    """.trimIndent()
+                )
+        )
 
         val validated = facade.validateAuroraConfig(
             newConfig,
@@ -562,7 +578,8 @@ class AuroraConfigFacadeTest(
             }
         }
 
-        val patch = """[{
+        val patch =
+            """[{
             "op": "add",
             "path": "/version",
             "value": "test"

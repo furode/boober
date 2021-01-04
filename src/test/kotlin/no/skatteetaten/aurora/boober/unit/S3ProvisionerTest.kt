@@ -44,7 +44,8 @@ class S3ProvisionerTest @Autowired constructor(val server: MockRestServiceServer
 
     @Test
     fun `smoke test for successful provisioning`() {
-        @Language("JSON") val response = """{
+        @Language("JSON") val response =
+            """{
             "accessKey": "accesskey",
             "secretKey": "some-key",
             "host": "http://fiona"

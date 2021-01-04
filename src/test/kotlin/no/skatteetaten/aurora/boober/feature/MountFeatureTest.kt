@@ -23,7 +23,8 @@ class MountFeatureTest : AbstractFeatureTest() {
 
     val vaultProvider: VaultProvider = mockk()
 
-    val configMapJson = """{
+    val configMapJson =
+        """{
               "mounts": {
                 "mount": {
                   "type": "ConfigMap",
@@ -36,7 +37,8 @@ class MountFeatureTest : AbstractFeatureTest() {
               }  
              }"""
 
-    val secretVaultJson = """{
+    val secretVaultJson =
+        """{
               "mounts": {
                 "mount": {
                   "type": "Secret",
@@ -46,7 +48,8 @@ class MountFeatureTest : AbstractFeatureTest() {
               }  
              }"""
 
-    val disabledMounts = """{
+    val disabledMounts =
+        """{
               "mounts": {
                 "mount": {
                   "enabled" : false,
@@ -57,7 +60,8 @@ class MountFeatureTest : AbstractFeatureTest() {
               }  
              }"""
 
-    val existingSecretJson = """{
+    val existingSecretJson =
+        """{
               "mounts": {
                 "mount": {
                   "type": "Secret",
@@ -67,7 +71,8 @@ class MountFeatureTest : AbstractFeatureTest() {
               }  
              }"""
 
-    val existingPVCJson = """{
+    val existingPVCJson =
+        """{
               "mounts": {
                 "mount": {
                   "type": "PVC",
@@ -114,7 +119,8 @@ class MountFeatureTest : AbstractFeatureTest() {
                 ${data.jsonFragment}
                 }
               }  
-             }""".trimIndent(),
+             }
+                """.trimIndent(),
                 fullValidation = false
             )
         }.singleApplicationError(data.errorMessage)

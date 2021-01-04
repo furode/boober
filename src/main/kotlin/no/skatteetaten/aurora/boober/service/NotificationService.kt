@@ -78,7 +78,8 @@ class NotificationService(
             if (isSuccessful) "Successful deploys" else "Failed deploys \n For more information run `ao inspect <deployId>` in cli"
         val color = if (isSuccessful) AttachmentColor.Green else AttachmentColor.Red
 
-        val text = """
+        val text =
+            """
                 |#### $headerMessage
                 |$listOfDeploys
         """.trimMargin()

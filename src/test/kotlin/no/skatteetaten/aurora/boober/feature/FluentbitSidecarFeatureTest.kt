@@ -27,7 +27,9 @@ class FluentbitSidecarFeatureTest : AbstractFeatureTest() {
                 }
              } 
            }""",
-            createEmptyDeploymentConfig(), emptyList(), 3
+            createEmptyDeploymentConfig(),
+            emptyList(),
+            3
         )
         assertThat(dcResource).auroraResourceModifiedByThisFeatureWithComment("Added fluentbit volume, sidecar container and annotation")
             .auroraResourceMatchesFile("dc.json")
@@ -48,7 +50,10 @@ class FluentbitSidecarFeatureTest : AbstractFeatureTest() {
                 "index": "test-index"
              }
            }""",
-            createEmptyDeploymentConfig(), emptyList(), 0)
+            createEmptyDeploymentConfig(),
+            emptyList(),
+            0
+        )
         assertThat(dcResource).isNotNull()
         val config = dcResource.resource as DeploymentConfig
         val annotations = config.spec.template.metadata.annotations
@@ -65,7 +70,10 @@ class FluentbitSidecarFeatureTest : AbstractFeatureTest() {
                 "index": "test-index"
              }
            }""",
-            createEmptyDeploymentConfig(), emptyList(), 0)
+            createEmptyDeploymentConfig(),
+            emptyList(),
+            0
+        )
         assertThat(dcResource).isNotNull()
         val config = dcResource.resource as DeploymentConfig
         val annotations = config.spec.template.metadata.annotations
@@ -82,7 +90,10 @@ class FluentbitSidecarFeatureTest : AbstractFeatureTest() {
                 "index": ""
              }
            }""",
-            createEmptyDeploymentConfig(), emptyList(), 0)
+            createEmptyDeploymentConfig(),
+            emptyList(),
+            0
+        )
         assertThat(dcResource).isNotNull()
         val config = dcResource.resource as DeploymentConfig
         assertThat(config.spec.template.metadata).isNull()

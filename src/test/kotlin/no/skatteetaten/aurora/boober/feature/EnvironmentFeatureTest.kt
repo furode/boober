@@ -75,7 +75,9 @@ class EnvironmentFeatureTest : AbstractFeatureTest() {
             createAuroraDeploymentContext(
                 files = listOf(
                     AuroraConfigFile(
-                        "utv/about.json", contents = """{
+                        "utv/about.json",
+                        contents =
+                            """{
                   "permissions": {
                     "admin" : ""
                    }
@@ -113,7 +115,10 @@ class EnvironmentFeatureTest : AbstractFeatureTest() {
         )
 
         every { userDetailsProvider.getAuthenticatedUser() } returns User(
-            "hero", "token", "Jayne Cobb", grantedAuthorities = listOf(
+            "hero",
+            "token",
+            "Jayne Cobb",
+            grantedAuthorities = listOf(
                 SimpleGrantedAuthority("APP_PaaS_utv")
             )
         )
@@ -122,7 +127,8 @@ class EnvironmentFeatureTest : AbstractFeatureTest() {
             generateResources(
                 files = listOf(
                     AuroraConfigFile(
-                        "utv/about.json", """{
+                        "utv/about.json",
+                        """{
               "permissions" : {
                 "view" : "APP_PaaS_test",
                 "adminServiceAccount" : "foo:bar:baz"
@@ -163,7 +169,8 @@ class EnvironmentFeatureTest : AbstractFeatureTest() {
                 """{ "affiliation" : "foo"}""",
                 files = listOf(
                     AuroraConfigFile(
-                        "about.json", """{
+                        "about.json",
+                        """{
                          "schemaVersion": "v1",
                          "permissions": {
                            "admin": "APP_PaaS_utv"
@@ -184,7 +191,8 @@ class EnvironmentFeatureTest : AbstractFeatureTest() {
             createAuroraDeploymentContext(
                 files = listOf(
                     AuroraConfigFile(
-                        "about.json", """{
+                        "about.json",
+                        """{
                          "schemaVersion": "v1",
                          "affiliation" : "this-is-too-damn-long",
                          "permissions": {
@@ -228,7 +236,10 @@ class EnvironmentFeatureTest : AbstractFeatureTest() {
         )
 
         every { userDetailsProvider.getAuthenticatedUser() } returns User(
-            "hero", "token", "Jayne Cobb", grantedAuthorities = listOf(
+            "hero",
+            "token",
+            "Jayne Cobb",
+            grantedAuthorities = listOf(
                 SimpleGrantedAuthority("APP_PaaS_utv")
             )
         )
@@ -236,7 +247,8 @@ class EnvironmentFeatureTest : AbstractFeatureTest() {
         val ctx = createAuroraDeploymentContext(
             files = listOf(
                 AuroraConfigFile(
-                    "about.json", """{
+                    "about.json",
+                    """{
                "schemaVersion": "v1",
                "affiliation" : "paas",
                "permissions": {

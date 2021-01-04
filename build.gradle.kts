@@ -1,63 +1,57 @@
-import com.adarshr.gradle.testlogger.theme.ThemeType
-
 plugins {
-    id("org.springframework.cloud.contract")
-    id("org.jetbrains.kotlin.jvm") version "1.3.72"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.3.72"
-    id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
-    id("org.sonarqube") version "2.8"
+    id("java")
+    id("no.skatteetaten.gradle.aurora") version "4.1.1"
+}
 
-    id("org.springframework.boot") version "2.2.6.RELEASE"
-    id("org.asciidoctor.convert") version "2.4.0"
-
-    id("com.gorylenko.gradle-git-properties") version "2.2.2"
-    id("com.github.ben-manes.versions") version "0.28.0"
-    id("se.patrikerdes.use-latest-versions") version "0.2.13"
-    id("com.adarshr.test-logger") version "2.0.0"
-
-    id("no.skatteetaten.gradle.aurora") version "3.5.2"
+aurora {
+    useAuroraDefaults
+    useKotlin {
+        useKtLint
+    }
+    useSpringBoot {
+        useCloudContract
+    }
+    features {
+        checkstylePlugin = false
+    }
+    versions {
+        springCloudContract = "2.2.5.RELEASE"
+    }
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.3.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.4.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
 
-    implementation("org.eclipse.jgit:org.eclipse.jgit:5.7.0.202003110725-r")
-    implementation("org.apache.httpcomponents:httpclient:4.5.12")
-    implementation("com.github.fge:json-patch:1.9")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
+    implementation("org.apache.httpcomponents:httpclient:4.5.13")
+    implementation("com.github.fge:json-patch:1.13")
+
     implementation("org.encryptor4j:encryptor4j:0.1.2")
     // The above library uses an vulnerable bcprov, set the fixed version here, hopefully this will work.
     // pr is sent to maintainer
-    implementation("org.bouncycastle:bcprov-jdk15on:1.65")
-    implementation("com.github.ben-manes.caffeine:caffeine:2.8.1")
-    implementation("org.apache.commons:commons-text:1.8")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.68")
+
+    implementation("com.github.ben-manes.caffeine:caffeine:2.8.8")
+    implementation("org.apache.commons:commons-text:1.9")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
-
-    // TODO: 2.7.1 er nyere en 3.0, det er viktig at vi kjører denne og ikke 3.0 job formatet er feil i 3.0
-    implementation("com.fkorotkov:kubernetes-dsl:2.7.1")
+    implementation("com.fkorotkov:kubernetes-dsl:2.8.1")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.retry:spring-retry")
-    implementation("com.cronutils:cron-utils:9.0.2")
+    implementation("com.cronutils:cron-utils:9.1.3")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("io.mockk:mockk:1.10.2")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.23")
+    testImplementation("no.skatteetaten.aurora:mockmvc-extensions-kotlin:1.1.6")
+    testImplementation("com.ninja-squad:springmockk:2.0.3")
+    testImplementation("org.junit-pioneer:junit-pioneer:1.0.0")
 
-    testImplementation("io.mockk:mockk:1.10.0")
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.20")
-    testImplementation("no.skatteetaten.aurora:mockmvc-extensions-kotlin:1.1.0")
-    testImplementation("com.ninja-squad:springmockk:2.0.1")
 }
-
-testlogger {
-    theme = ThemeType.PLAIN
-}
-
-/*
-tasks.test { onlyIf { false } }
-tasks.asciidoctor { onlyIf { false } }
-*/

@@ -30,7 +30,8 @@ class UserAnnotationControllerV1Test {
 
     @Test
     fun `Update user annotations`() {
-        val jsonEntries = """{"key": "value"}"""
+        val jsonEntries =
+            """{"key": "value"}"""
         every {
             userAnnotationService.updateAnnotations(
                 "filters",

@@ -69,7 +69,8 @@ class BigIpFeature(
                 namespace = adc.namespace
             },
             spec = BigIpSpec(
-                routeName, BigIpKonfigurasjonstjenesten(
+                routeName,
+                BigIpKonfigurasjonstjenesten(
                     service = adc["bigip/service"],
                     asmPolicy = adc.getOrNull("bigip/asmPolicy"),
                     oauthScopes = adc.getDelimitedStringOrArrayAsSetOrNull("bigip/oauthScopes"),

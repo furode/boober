@@ -20,8 +20,13 @@ class AuroraDeploymentSpecConfigFieldValidator(
     fun validate(fullValidation: Boolean = true): List<ConfigFieldErrorDetail> {
 
         val envPointers = listOf(
-            "env/name", "env/ttl", "envName", "affiliation",
-            "permissions/admin", "permissions/view", "permissions/adminServiceAccount"
+            "env/name",
+            "env/ttl",
+            "envName",
+            "affiliation",
+            "permissions/admin",
+            "permissions/view",
+            "permissions/adminServiceAccount"
         )
 
         val errors: List<ConfigFieldErrorDetail> = fieldHandlers.mapNotNull { e ->
@@ -48,7 +53,8 @@ class AuroraDeploymentSpecConfigFieldValidator(
                 val err = when {
                     invalidEnvSource -> ConfigFieldErrorDetail.illegal(
                         "Invalid Source field=${e.name} requires an about source. Actual source is source=${rawField.name}",
-                        e.name, rawField
+                        e.name,
+                        rawField
                     )
                     result == null -> null
                     auroraConfigField != null -> ConfigFieldErrorDetail.illegal(

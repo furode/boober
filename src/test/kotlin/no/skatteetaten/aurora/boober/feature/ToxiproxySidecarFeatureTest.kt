@@ -18,7 +18,9 @@ class ToxiproxySidecarFeatureTest : AbstractFeatureTest() {
         val (serviceResource, dcResource, configResource) = generateResources(
             """{
              "toxiproxy" : true 
-           }""", createEmptyService(), createEmptyDeploymentConfig()
+           }""",
+            createEmptyService(),
+            createEmptyDeploymentConfig()
         )
 
         assertThat(serviceResource).auroraResourceModifiedByThisFeatureWithComment("Changed targetPort to point to toxiproxy")

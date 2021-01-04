@@ -72,11 +72,13 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
             AuroraConfigFieldHandler(
                 "routeDefaults/tls/insecurePolicy",
                 defaultValue = InsecurePolicy.valueOf(applicationPlatform.insecurePolicy),
-                validator = { it.oneOf(InsecurePolicy.values().map { v -> v.name }) }),
+                validator = { it.oneOf(InsecurePolicy.values().map { v -> v.name }) }
+            ),
             AuroraConfigFieldHandler(
                 "routeDefaults/tls/termination",
                 defaultValue = TlsTermination.edge,
-                validator = { it.oneOf(TlsTermination.values().map { v -> v.name }) })
+                validator = { it.oneOf(TlsTermination.values().map { v -> v.name }) }
+            )
         ) +
             findRouteAnnotationHandlers("routeDefaults", cmd.applicationFiles)
     }
@@ -193,14 +195,21 @@ class RouteFeature(@Value("\${boober.route.suffix}") val routeSuffix: String) : 
                 AuroraConfigFieldHandler("$key/host"),
                 AuroraConfigFieldHandler(
                     "$key/fullyQualifiedHost",
-                    validator = { it.boolean(false) }), // since this is internal I do not want default value on it.
-                AuroraConfigFieldHandler("$key/path",
-                    validator = { it?.startsWith("/", "Path must start with /") }),
+                    validator = { it.boolean(false) }
+                ), // since this is internal I do not want default value on it.
+                AuroraConfigFieldHandler(
+                    "$key/path",
+                    validator = { it?.startsWith("/", "Path must start with /") }
+                ),
                 AuroraConfigFieldHandler("$key/tls/enabled", validator = { it.boolean() }),
-                AuroraConfigFieldHandler("$key/tls/insecurePolicy",
-                    validator = { it.oneOf(InsecurePolicy.values().map { v -> v.name }, required = false) }),
-                AuroraConfigFieldHandler("$key/tls/termination",
-                    validator = { it.oneOf(TlsTermination.values().map { v -> v.name }, required = false) })
+                AuroraConfigFieldHandler(
+                    "$key/tls/insecurePolicy",
+                    validator = { it.oneOf(InsecurePolicy.values().map { v -> v.name }, required = false) }
+                ),
+                AuroraConfigFieldHandler(
+                    "$key/tls/termination",
+                    validator = { it.oneOf(TlsTermination.values().map { v -> v.name }, required = false) }
+                )
 
             ) + findRouteAnnotationHandlers(key, applicationFiles)
         }.toSet()
@@ -369,11 +378,14 @@ fun findRouteAnnotationHandlers(
     annotationsKey: String = "annotations"
 ): Set<AuroraConfigFieldHandler> {
 
-    return applicationFiles.findSubHandlers("$prefix/$annotationsKey", validatorFn = { key ->
-        {
-            if (key.contains("/")) {
-                IllegalArgumentException("Annotation $key cannot contain '/'. Use '|' instead")
-            } else null
+    return applicationFiles.findSubHandlers(
+        "$prefix/$annotationsKey",
+        validatorFn = { key ->
+            {
+                if (key.contains("/")) {
+                    IllegalArgumentException("Annotation $key cannot contain '/'. Use '|' instead")
+                } else null
+            }
         }
-    }).toSet()
+    ).toSet()
 }

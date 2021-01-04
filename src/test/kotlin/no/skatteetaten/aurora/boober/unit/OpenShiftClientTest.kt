@@ -94,7 +94,8 @@ class OpenShiftClientTest : ResourceLoader() {
     fun `Uses correct resource client based on OpenShift kind`(client: ResourceClients) {
 
         val name = "does not matter"
-        val mockedResource = """{ "kind": "${client.data.kind}", "metadata": { "name": "$name" } }"""
+        val mockedResource =
+            """{ "kind": "${client.data.kind}", "metadata": { "name": "$name" } }"""
         val command = OpenshiftCommand(
             OperationType.CREATE,
             "http://foo/bar",
@@ -170,7 +171,8 @@ class OpenShiftClientTest : ResourceLoader() {
         every { userClient.post(cmd.url, payload) } throws OpenShiftException(
             "Does not exist",
             HttpClientErrorException(
-                HttpStatus.SERVICE_UNAVAILABLE, "not available",
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "not available",
                 """{ "failed" : "true"}""".toByteArray(),
                 Charset.defaultCharset()
             )
@@ -200,7 +202,8 @@ class OpenShiftClientTest : ResourceLoader() {
         every { userClient.post(cmd.url, payload) } throws OpenShiftException(
             "Does not exist",
             HttpClientErrorException(
-                HttpStatus.SERVICE_UNAVAILABLE, "not available",
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "not available",
                 """failed""".toByteArray(),
                 Charset.defaultCharset()
             )

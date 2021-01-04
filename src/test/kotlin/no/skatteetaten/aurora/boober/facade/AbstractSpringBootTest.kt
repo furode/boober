@@ -161,8 +161,12 @@ abstract class AbstractSpringBootTest : ResourceLoader() {
     fun before() {
         Instants.determineNow = { Instant.EPOCH }
         every { userDetailsProvider.getAuthenticatedUser() } returns User(
-            "hero", "token", "Jayne Cobb", grantedAuthorities = listOf(
-                SimpleGrantedAuthority("APP_PaaS_utv"), SimpleGrantedAuthority("APP_PaaS_drift")
+            "hero",
+            "token",
+            "Jayne Cobb",
+            grantedAuthorities = listOf(
+                SimpleGrantedAuthority("APP_PaaS_utv"),
+                SimpleGrantedAuthority("APP_PaaS_drift")
             )
         )
         every { serviceAccountTokenProvider.getToken() } returns "auth token"
