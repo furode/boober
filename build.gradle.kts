@@ -52,5 +52,4 @@ dependencies {
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.23")
     testImplementation("no.skatteetaten.aurora:mockmvc-extensions-kotlin:1.1.6")
     testImplementation("com.ninja-squad:springmockk:3.0.1")
-
 }

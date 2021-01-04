@@ -31,13 +31,13 @@ class ServiceAccountTokenProvider(
     override fun getToken() = lazyValue
 
     val lazyValue: String by lazy {
-       readToken()
+        readToken()
     }
 
     private fun readToken(): String {
         logger.info("Reading application token from tokenLocation={}", tokenLocation)
         try {
-            val token: String= File(tokenLocation).readText().trim()
+            val token: String = File(tokenLocation).readText().trim()
             logger.trace(
                 "Read token with length={}, firstLetter={}, lastLetter={}",
                 token.length,
