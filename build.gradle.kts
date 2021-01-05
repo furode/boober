@@ -21,7 +21,7 @@ aurora {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.4.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
 
     implementation("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
     implementation("org.apache.httpcomponents:httpclient:4.5.13")
