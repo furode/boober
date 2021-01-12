@@ -5,10 +5,8 @@ plugins {
 
 aurora {
     useKotlinDefaults
-    useSpringBoot {
-        useCloudContract
-    }
-
+    useSpringBootDefaults
+    useAsciiDoctor
 }
 
 dependencies {
@@ -43,5 +41,5 @@ dependencies {
     testImplementation("io.mockk:mockk:1.10.4")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.23")
     testImplementation("no.skatteetaten.aurora:mockmvc-extensions-kotlin:1.1.6")
-    testImplementation("com.ninja-squad:springmockk:2.0.3")
+    testImplementation("com.ninja-squad:springmockk:3.0.1")
 }
