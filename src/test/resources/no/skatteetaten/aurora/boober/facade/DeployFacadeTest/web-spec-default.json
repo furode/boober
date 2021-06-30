@@ -236,6 +236,14 @@
       }
     ]
   },
+  "azure" : {
+    "source" : "default",
+    "value" : false,
+    "sources" : [ {
+      "name" : "default",
+      "value" : false
+    } ]
+  },
   "config": {
     "foo2": {
       "source": "web.json",
